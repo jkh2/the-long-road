@@ -70,8 +70,8 @@ This license shall be governed by and construed in accordance with the laws of [
 
 **For licensing inquiries, partnerships, or commercial use:**
 - **Creator**: James Keith Harwood II
-- **Email**: [Your email]
-- **GitHub**: [Your GitHub profile]
+- **Email**: jameskharwood2@gmail.com
+- **GitHub**: https://github.com/jkh2
 
 ---
 
