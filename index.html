@@ -219,6 +219,16 @@
             <h3 style="color: #d4af37; margin-bottom: 15px;">🔑 Setup Required</h3>
             <p style="margin-bottom: 15px;">Enter your OpenAI API key to begin your journey:</p>
             <input type="password" id="apiKeyInput" class="api-key-input" placeholder="sk-..." />
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #d4af37; margin-bottom: 10px;">🌍 Choose Your Adventure:</h4>
+                <select id="adventureType" style="width: 100%; padding: 10px; border: 2px solid #8b4513; border-radius: 5px; background: rgba(0, 0, 0, 0.5); color: #e8ddd4; font-size: 16px; font-family: 'Georgia', serif;">
+                    <option value="post-apocalypse">🌄 The Long Road - Post-Apocalyptic Survival</option>
+                    <option value="fantasy">⚔️ The Enchanted Path - Fantasy Adventure</option>
+                    <option value="space">🚀 The Void Journey - Space Survival</option>
+                </select>
+            </div>
+            
             <div class="button-group">
                 <button onclick="startGame()" class="primary-btn">🚀 Begin Adventure</button>
                 <button onclick="loadGame()" class="secondary-btn">📁 Load Saved Game</button>
@@ -302,10 +312,11 @@
             apiKey: ''
         };
 
-        const GAME_PROMPT = `🧠 SYSTEM INSTRUCTION:
-You are the Game Engine and Dungeon Master of "THE LONG ROAD: A Survival AI Adventure"—a real-time, AI-powered survival RPG that blends immersive storytelling, survival mechanics, and visual worldbuilding.
+        function getAdventurePrompt(adventureType) {
+            const baseInstructions = `🧠 SYSTEM INSTRUCTION:
+You are the Game Engine and Dungeon Master of an AI-powered survival adventure that blends immersive storytelling, survival mechanics, and visual worldbuilding.
 
-🌍 WORLD SIMULATION: Before gameplay begins, simulate a vast, internally consistent open world in your memory with diverse biomes (ruins, forests, bunkers, peaks, marshes), environmental conditions, persistent NPCs, survival needs, items to scavenge, and multi-stage quests. Only reveal parts as the player explores.
+🌍 WORLD SIMULATION: Before gameplay begins, simulate a vast, internally consistent open world in your memory with diverse locations, environmental conditions, persistent NPCs, survival needs, items to scavenge, and multi-stage quests. Only reveal parts as the player explores.
 
 🎮 GAMEPLAY: Each turn, provide immersive narrative, present meaningful choices, allow creative interaction, and track consequences persistently.
 
@@ -322,11 +333,48 @@ You are the Game Engine and Dungeon Master of "THE LONG ROAD: A Survival AI Adve
 - Location: [current location]
 - Time of Day: [time]
 
-🎒 STARTING INVENTORY: Pocketknife (75% durability), Empty Canteen, Crushed Map Fragment
-
 Player choices are never limited to suggestions - accept any creative action.
 
-When the game begins, immediately start the adventure by placing the player at a crossroads on a dusty dirt road just before sunset, with a weathered wooden signpost showing three mysterious paths. Generate the opening scene with vivid description and present the first choices.`;
+When the game begins, immediately start the adventure with vivid description and present the first choices.`;
+
+            switch(adventureType) {
+                case 'fantasy':
+                    return baseInstructions + `
+
+🏰 FANTASY ADVENTURE SETTING:
+You are the Game Engine for "THE ENCHANTED PATH: A Fantasy Adventure" - a magical world of ancient forests, mystical creatures, and arcane mysteries.
+
+🎒 STARTING INVENTORY: Enchanted Dagger (glowing softly), Empty Waterskin, Ancient Map Fragment, Small Pouch of Gold Coins
+
+⚔️ WORLD ELEMENTS: Include magic spells, mythical creatures (dragons, unicorns, talking animals), medieval towns, ancient ruins, wise wizards, treasure, magical items, and fantasy survival challenges.
+
+🌟 START SCENE: Begin at a mystical crossroads in an enchanted forest where three magical paths diverge, each marked by glowing runes and leading to different magical realms.`;
+
+                case 'space':
+                    return baseInstructions + `
+
+🚀 SPACE SURVIVAL SETTING:
+You are the Game Engine for "THE VOID JOURNEY: A Space Survival Adventure" - stranded in the depths of space with failing life support and mysterious alien worlds.
+
+🎒 STARTING INVENTORY: Multi-tool (85% power), Emergency Oxygen Tank (half full), Damaged Navigation Device, Emergency Rations (2 days)
+
+🌌 WORLD ELEMENTS: Include alien planets, space stations, zero gravity environments, life support challenges, alien creatures, advanced technology, energy weapons, and cosmic mysteries.
+
+🛸 START SCENE: Begin at an emergency pod crash site on an alien world where three paths lead to different alien structures: a crashed ship, a mysterious energy beacon, and strange crystalline formations.`;
+
+                default: // post-apocalypse
+                    return baseInstructions + `
+
+🌄 POST-APOCALYPTIC SETTING:
+You are the Game Engine for "THE LONG ROAD: A Survival AI Adventure" - a dangerous journey through the remnants of civilization.
+
+🎒 STARTING INVENTORY: Pocketknife (75% durability), Empty Canteen, Crushed Map Fragment
+
+🏚️ WORLD ELEMENTS: Include ruined cities, abandoned settlements, harsh weather, dangerous scavengers, hidden bunkers, rare supplies, makeshift weapons, and post-civilization survival challenges.
+
+🚦 START SCENE: Begin at a crossroads on a dusty dirt road just before sunset, with a weathered wooden signpost showing three mysterious paths through the wasteland.`;
+            }
+        }
 
         function startGame() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -335,16 +383,25 @@ When the game begins, immediately start the adventure by placing the player at a
                 return;
             }
             
+            const adventureType = document.getElementById('adventureType').value;
+            
             gameState.apiKey = apiKey;
+            gameState.adventureType = adventureType;
             localStorage.setItem('longRoadApiKey', apiKey);
             
             document.getElementById('setupPanel').style.display = 'none';
             document.getElementById('gameArea').style.display = 'block';
             
             // Show encouraging loading message for first scene
+            const adventureNames = {
+                'post-apocalypse': '🌄 The Long Road',
+                'fantasy': '⚔️ The Enchanted Path', 
+                'space': '🚀 The Void Journey'
+            };
+            
             document.getElementById('storyDisplay').innerHTML = `
                 <div style="text-align: center; padding: 40px;">
-                    <h3 style="color: #d4af37; margin-bottom: 20px;">🌄 Welcome to The Long Road</h3>
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">${adventureNames[adventureType]}</h3>
                     <p style="font-size: 1.1em; margin-bottom: 15px;">Your adventure is being generated...</p>
                     <p style="color: #cd853f; font-style: italic;">The AI is creating your unique world, crafting the opening scene, and generating your first image.</p>
                     <p style="color: #8b4513; margin-top: 20px;"><strong>This may take 10-15 seconds. Your patience will be rewarded!</strong></p>
@@ -352,9 +409,10 @@ When the game begins, immediately start the adventure by placing the player at a
                 </div>
             `;
             
-            // Initialize game with clear startup instruction
-            const initialChoice = "START THE GAME NOW. Place me at the crossroads with the wooden signpost and three mysterious paths. Describe the scene vividly, present my first choices, and provide the status block. This is the opening scene of the adventure.";
-            makeAICall(initialChoice, true);
+            // Initialize game with adventure-specific prompt
+            const gamePrompt = getAdventurePrompt(adventureType);
+            const initialChoice = "START THE GAME NOW. Begin the adventure with the opening scene as described in your instructions. Describe the scene vividly, present the first choices, and provide the status block.";
+            makeAICall(initialChoice, true, gamePrompt);
         }
 
         function loadGame() {
@@ -390,13 +448,15 @@ When the game begins, immediately start the adventure by placing the player at a
             document.getElementById('choiceInput').value = '';
         }
 
-        async function makeAICall(userChoice, isInitial = false) {
+        async function makeAICall(userChoice, isInitial = false, customPrompt = null) {
             showLoading(true);
             hideError();
             
             try {
+                const systemPrompt = customPrompt || getAdventurePrompt(gameState.adventureType || 'post-apocalypse');
+                
                 const messages = [
-                    { role: 'system', content: GAME_PROMPT },
+                    { role: 'system', content: systemPrompt },
                     ...gameState.storyLog,
                     { role: 'user', content: userChoice }
                 ];
