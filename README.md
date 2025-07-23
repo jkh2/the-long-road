@@ -17,7 +17,7 @@ The Long Road is a revolutionary text-based survival adventure that combines the
 
 ## 🚀 Play Now
 
-**[👉 Click Here to Start Your Journey](https://yourusername.github.io/the-long-road)**
+[👉 Click Here to Start Your Journey] https://yourusername.github.io/the-long-road 
 
 *No installation, no accounts, no complexity - just pure storytelling.*
 
@@ -134,7 +134,7 @@ Code available for educational and personal use.
 
 Your journey starts at a crossroads on a dusty road. Three paths stretch before you, each leading to mystery, danger, and discovery.
 
-**[👉 Start Your Adventure Now](https://yourusername.github.io/the-long-road)**
+[👉 Start Your Adventure Now] https://yourusername.github.io/the-long-road
 
 *The long road awaits. What path will you choose?*
 
