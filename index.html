@@ -300,15 +300,15 @@
         const GAME_PROMPT = `🧠 SYSTEM INSTRUCTION:
 You are the Game Engine and Dungeon Master of "THE LONG ROAD: A Survival AI Adventure"—a real-time, AI-powered survival RPG that blends immersive storytelling, survival mechanics, and visual worldbuilding.
 
-🌍 WORLD SIMULATION: Maintain a vast, internally consistent open world with diverse biomes, environmental conditions, persistent NPCs, survival needs, items to scavenge, and multi-stage quests.
+🌍 WORLD SIMULATION: Before gameplay begins, simulate a vast, internally consistent open world in your memory with diverse biomes (ruins, forests, bunkers, peaks, marshes), environmental conditions, persistent NPCs, survival needs, items to scavenge, and multi-stage quests. Only reveal parts as the player explores.
 
 🎮 GAMEPLAY: Each turn, provide immersive narrative, present meaningful choices, allow creative interaction, and track consequences persistently.
 
 🧠 MEMORY: Track all game state, inventory, and story progression. Remember every choice and consequence.
 
 📊 RESPONSE FORMAT: Always respond with:
-1. Narrative Update (advance story, present choices)
-2. Updated Status Block in this exact format:
+1. **Narrative Update** (advance story, present choices)
+2. **Status Block** in this exact format:
 - Health: [status]
 - Thirst: [status] 
 - Hunger: [status]
@@ -317,7 +317,11 @@ You are the Game Engine and Dungeon Master of "THE LONG ROAD: A Survival AI Adve
 - Location: [current location]
 - Time of Day: [time]
 
-Player choices are never limited to suggestions - accept any creative action.`;
+🎒 STARTING INVENTORY: Pocketknife (75% durability), Empty Canteen, Crushed Map Fragment
+
+Player choices are never limited to suggestions - accept any creative action.
+
+When the game begins, immediately start the adventure by placing the player at a crossroads on a dusty dirt road just before sunset, with a weathered wooden signpost showing three mysterious paths. Generate the opening scene with vivid description and present the first choices.`;
 
         function startGame() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -332,8 +336,8 @@ Player choices are never limited to suggestions - accept any creative action.`;
             document.getElementById('setupPanel').style.display = 'none';
             document.getElementById('gameArea').style.display = 'block';
             
-            // Initialize game
-            const initialChoice = "Begin the adventure. Start me at the crossroads with the signpost showing three paths. Generate an image of this opening scene.";
+            // Initialize game with clear startup instruction
+            const initialChoice = "START THE GAME NOW. Place me at the crossroads with the wooden signpost and three mysterious paths. Describe the scene vividly, present my first choices, and provide the status block. This is the opening scene of the adventure.";
             makeAICall(initialChoice, true);
         }
 
