@@ -337,6 +337,17 @@ When the game begins, immediately start the adventure by placing the player at a
             document.getElementById('setupPanel').style.display = 'none';
             document.getElementById('gameArea').style.display = 'block';
             
+            // Show encouraging loading message for first scene
+            document.getElementById('storyDisplay').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">🌄 Welcome to The Long Road</h3>
+                    <p style="font-size: 1.1em; margin-bottom: 15px;">Your adventure is being generated...</p>
+                    <p style="color: #cd853f; font-style: italic;">The AI is creating your unique world, crafting the opening scene, and generating your first image.</p>
+                    <p style="color: #8b4513; margin-top: 20px;"><strong>This may take 10-15 seconds. Your patience will be rewarded!</strong></p>
+                    <div style="margin-top: 25px; font-size: 1.2em;">⏳ Loading...</div>
+                </div>
+            `;
+            
             // Initialize game with clear startup instruction
             const initialChoice = "START THE GAME NOW. Place me at the crossroads with the wooden signpost and three mysterious paths. Describe the scene vividly, present my first choices, and provide the status block. This is the opening scene of the adventure.";
             makeAICall(initialChoice, true);
@@ -554,7 +565,8 @@ When the game begins, immediately start the adventure by placing the player at a
 
         // Enter key support
         document.getElementById('choiceInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.ctrlKey) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent new line
                 makeChoice();
             }
         });
